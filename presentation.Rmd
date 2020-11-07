@@ -1,0 +1,110 @@
+---
+title: "Multiple Regression Analysis on Birthweight "
+subtitle: "DATA2002 Group Presentation"
+author: "Kevin Qiu, Rajat Lal, Taoran Bu, Mingze Gong, Yiren Cao"
+date: "11 November 2020"
+output:
+  xaringan::moon_reader:
+    css: ["default", "assets/sydney-fonts.css", "assets/sydney.css"]
+    self_contained: false # if true, fonts will be stored locally
+    seal: true # show a title slide with YAML information
+    includes:
+      in_header: "assets/mathjax-equation-numbers.html"
+    nature:
+      beforeInit: ["assets/remark-zoom.js", "https://platform.twitter.com/widgets.js"]
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: '16:9' # alternatives '16:9' or '4:3' or others e.g. 13:9
+      navigation:
+        scroll: false # disable slide transitions by scrolling
+---
+
+class: title-slide,middle
+background-image: url("assets/USydLogo-white.svg"), url("assets/title-image1.jpg")
+background-position: 10% 90%, 100% 50%
+background-size: 160px, 50% 100%
+background-color: #0148A4
+
+
+# .text-shadow[.white[Data Description]]
+
+## .white[Rajat Lal, Taoran Bu]
+
+---
+## Background
+
+.pull-left[
+The purpose of this statistical report is to bring light to what particular risk factors help predict infant birth weight. The future health of the infant can be predicted from the birth weight of the child.
+
+<br>
+
+
+The data was collected from Baystate Medical Center, Springfield, Massachusetts in 1986 which is accessible in Rstudio via the MASS package under ‘birthwt’.
+
+]
+
+.pull-right[
+```{r, echo = FALSE, fig.align="right", fig.cap = "Baystate Medical Center"}
+knitr::include_graphics("Picture1.png")
+```
+
+]
+
+.footnote[
+Image source: ???
+]
+---
+
+## Questions
+
+.pull-left[
+1. If smoking is in fact a predicting factor for birth weight of babies, in particular does it have a negative coefficient.
+
+2. Does mother’s birth weight in the last menstrual period predict baby birth weight?
+
+3. What are all the significant predicting factors of baby birth weight?
+]
+
+.pull-right[
+```{r, echo = FALSE, fig.align="right"}
+knitr::include_graphics("Picture2.png")
+```
+
+]
+
+.footnote[
+Image source: ???
+]
+---
+## Pre Analysis Observations
+
+
+There are ten variables in this dataset, as shown by the summary statistics:
+
+- Mean birth weight is approximately 2.9kg, about 600 grams below the expected mean of 3.5kg. This is within the normal range of weights of 2.5kg-
+
+
+
+
+.scroll-box-14[
+```{r, echo = FALSE, warning=FALSE}
+library(MASS)
+data = birthwt
+summary(data)
+```
+]
+
+---
+## birthwt in R
+
+Here a glimpse of the data set we are going to use in the further research.
+
+
+```{r, echo = FALSE, message=FALSE, warning=FALSE}
+library(dplyr)
+library(MASS)
+data = birthwt
+glimpse(data)
+```
+
