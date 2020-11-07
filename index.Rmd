@@ -20,6 +20,203 @@ output:
         scroll: false # disable slide transitions by scrolling
 ---
 
+```{r, echo = FALSE, results='hide',  message=FALSE, warning=FALSE}
+library(janitor)
+library(skimr)
+library(tidyr)
+library(MASS)
+library(readr)
+library(ggfortify)
+library(dplyr)
+library(tidyverse)
+library(ggplot2)
+library(visdat)
+library(sjPlot)
+library(leaps)
+library(caret)
+```
+
+
+```{r, echo = FALSE, results='hide',  message=FALSE, warning=FALSE}
+data = MASS::birthwt
+data = data %>% mutate(
+  low = as.factor(low),
+  race = as.character(race),
+  smoke = as.character(smoke),
+  ui = as.character(ui),
+  ht = as.character(ht)
+)
+
+data_without_low = subset(data, select = -low)
+data_with_low = data
+```
+
+
+```{r,include=FALSE, echo = FALSE, results='hide',  message=FALSE, warning=FALSE}
+data_without_low_for_correlation = data_without_low
+data_without_low_for_correlation[] <- lapply(data_without_low_for_correlation,                    function(x)as.numeric(as.character(x)))
+qtlcharts::iplotCorr(data_without_low_for_correlation) # non-multicollinearity
+
+lm1_without_low = lm(bwt ~ ., data = data_without_low)
+autoplot(lm1_without_low, which = 1:2) # linearity + normality
+```
+
+```{r, include=FALSE, echo = FALSE, results='hide',  message=FALSE, warning=FALSE}
+data = data %>% mutate(
+  race = case_when(
+    race == 1 ~ "white",
+    race == 2 ~ "black",
+    race == 3 ~ "other"
+  )
+)
+
+data = data %>% mutate(
+  ui = case_when(
+    ui == 1 ~ "yes",
+    ui == 0 ~ "no"
+  )
+)
+
+data = data %>% mutate(
+  ht = case_when(
+    ht == 1 ~ "yes",
+    ht == 0 ~ "no"
+  )
+)
+
+data = data %>% mutate(
+  smoke = case_when(
+    smoke == 1 ~ "yes",
+    smoke == 0 ~ "no"
+  )
+)
+
+data = data %>% mutate(
+  low = case_when(
+    low == 1 ~ "yes",
+    low == 0 ~ "no"
+  )
+)
+
+data_without_low = subset(data, select = -low)
+data_with_low = data
+```
+
+
+```{r, include=FALSE, echo = FALSE, results='hide',  message=FALSE, warning=FALSE}
+M1 = lm1_without_low  # Full model
+M0 = lm(bwt ~ 1, data = data_without_low)  # Null model
+```
+
+
+```{r, include=FALSE, echo = FALSE, results='hide',  message=FALSE, warning=FALSE}
+# drop1(M1, test = "F")
+# M2 = update(M1, . ~ . - ftv)
+# drop1(M2, test = "F")
+# M3 = update(M2, . ~ . - age)
+# drop1(M3, test = "F")
+# M4 = update(M3, . ~ . - ptl)
+# drop1(M4, test = "F")
+
+step(M1)
+```
+
+
+```{r, include=FALSE, echo = FALSE, results='hide',  message=FALSE, warning=FALSE}
+step.back.aic = step(M1, direction = "backward", trace = FALSE)
+round(summary(step.back.aic)$coef,3)
+step.back.aic %>%broom::glance() %>% round(2) %>% t()
+```
+
+
+```{r, include=FALSE, echo = FALSE, results='hide',  message=FALSE, warning=FALSE}
+step.fwd.aic = step(M0, 
+                    scope = list(lower = M0, upper = M1), 
+                    direction = "forward", trace = FALSE)
+round(summary(step.fwd.aic)$coef,3)
+step.back.aic %>%broom::glance() %>% round(2) %>% t()
+```
+
+```{r, include=FALSE, echo = FALSE, results='hide',  message=FALSE, warning=FALSE}
+library(equatiomatic)
+equatiomatic::extract_eq(step.fwd.aic, intercept = "beta",use_coefs = TRUE)
+```
+
+
+```{r, include=FALSE, echo = FALSE, results='hide',  message=FALSE, warning=FALSE}
+exh = regsubsets(bwt~., data = data_without_low, nvmax = 8)
+summary(exh)$outmat
+```
+
+```{r, include=FALSE, echo = FALSE, results='hide',  message=FALSE, warning=FALSE}
+cv_without_low = train(
+  bwt ~ lwt + race + smoke + ht+ ui, data_without_low,
+  method = "lm",
+  trControl = trainControl(
+    method = "cv", number = 10,
+    verboseIter = FALSE
+  )
+)
+
+cv_without_low
+```
+
+
+```{r, include=FALSE, echo = FALSE, results='hide',  message=FALSE, warning=FALSE}
+autoplot(step.fwd.aic, which = 1:2)
+#GGally::ggpairs(data_without_low %>% select(lwt, race, smoke, ht,ui, bwt))
+```
+
+
+```{r, include=FALSE, echo = FALSE, results='hide',  message=FALSE, warning=FALSE}
+reg1 = lm(bwt ~ ., data = data_with_low)
+autoplot(reg1, which = 1:2)
+```
+
+```{r, include=FALSE, echo = FALSE, results='hide',  message=FALSE, warning=FALSE}
+W1 = reg1  # full model
+W0 = lm(bwt ~ 1, data = data_with_low) # null model
+```
+
+```{r, include=FALSE, echo = FALSE, results='hide',  message=FALSE, warning=FALSE}
+step(W1)
+```
+
+
+```{r, include=FALSE, echo = FALSE, results='hide',  message=FALSE, warning=FALSE}
+step.back.aic_with_low = step(W1, direction = "backward", trace = FALSE)
+round(summary(step.back.aic_with_low)$coef,3)
+step.back.aic_with_low %>%broom::glance() %>% round(2) %>% t()
+```
+
+
+```{r, include=FALSE, echo = FALSE, results='hide',  message=FALSE, warning=FALSE}
+step.fwd.aic_with_low = step(W0, scope = list(lower = W0, upper = W1), direction = "forward", trace = FALSE)
+summary(step.fwd.aic_with_low)
+```
+
+```{r, include=FALSE, echo = FALSE, results='hide',  message=FALSE, warning=FALSE}
+exh = regsubsets(bwt~., data = data_with_low, nvmax = 9)
+summary(exh)$outmat
+```
+
+```{r, include=FALSE, echo = FALSE, results='hide',  message=FALSE, warning=FALSE}
+cv_with_low = train(
+  bwt ~ low + ui+ smoke + race, data,
+  method = "lm",
+  trControl = trainControl(
+    method = "cv", number = 10,
+    verboseIter = FALSE
+  )
+)
+library(xtable)
+```
+
+```{r, include=FALSE, echo = FALSE, results='hide',  message=FALSE, warning=FALSE}
+cv_with_low
+cv_without_low
+```
+
 class: title-slide,middle
 background-image: url("assets/USydLogo-white.svg"), url("assets/title-image1.jpg")
 background-position: 10% 90%, 100% 50%
@@ -108,3 +305,116 @@ data = birthwt
 glimpse(data)
 ```
 
+---
+class: title-slide,middle
+background-image: url("assets/USydLogo-white.svg"), url("assets/title-image1.jpg")
+background-position: 10% 90%, 100% 50%
+background-size: 160px, 50% 100%
+background-color: #0148A4
+
+
+# .text-shadow[.white[Analysis]]
+
+## .white[Results]
+
+### .white[Mingze Gong]
+
+---
+## Final models
+
+We have the following models:
+
+.content-box-blue[
+.scroll-output[
+.font90[
+$$\operatorname{bwt} = 2362.21 - 525.52(\operatorname{ui}_{\operatorname{yes}}) + 126.91(\operatorname{race}_{\operatorname{other}}) + 475.06(\operatorname{race}_{\operatorname{white}}) - 356.32(\operatorname{smoke}_{\operatorname{yes}}) - 585.19(\operatorname{ht}_{\operatorname{yes}}) + 4.24(\operatorname{lwt}) + \epsilon$$
+]
+]
+]
+
+.content-box-blue[
+.font90[
+$$\operatorname{bwt}_{low} = 3294.45 - 1131.17(\operatorname{low}_{\operatorname{yes}}) - 309.28(\operatorname{ui}_{\operatorname{yes}}) + 16.48(\operatorname{race}_{\operatorname{other}}) + 206.36(\operatorname{race}_{\operatorname{white}}) - 157.3(\operatorname{smoke}_{\operatorname{yes}}) + \epsilon$$
+
+]
+]
+
+
+.center[
+.font170[Questions  `r icon::fa("question", pull = "centre", color = 'red')` 
+]
+]
+
+--
+.center[
+.font170[Which one is better `r icon::fa("question", pull = "centre", color = 'red')` 
+]
+]
+--
+--
+.center[
+.font170[Is there a better model here `r icon::fa("question", pull = "centre", color = 'red')` 
+]
+]
+--
+.center[
+.font190[Drop1&Update = AIC backward = AIC forward
+]
+]
+---
+## In sample performance
+
+<br>
+.scroll-box-20[
+```{r, echo = FALSE,  message=FALSE, warning=FALSE}
+sjPlot::tab_model(
+  step.fwd.aic, step.fwd.aic_with_low,
+  show.ci = FALSE,
+  show.aic = TRUE,
+  dv.labels = c("Without low variable", "With low variable")
+)
+```
+]
+
+---
+## Out of sample performance
+.pull-left[
+.scroll-output[
+```{r}
+cv_with_low
+```
+]
+]
+
+.pull-right[
+.scroll-output[
+```{r}
+cv_without_low
+```
+]
+]
+
+<br>
+.center[
+.font120[Classification And Regression Training]]
+
+---
+## Limits and possible improvements
+
+<br>
+
+<blockquote>
+Sociological theories often imply that two or more variables interact in their effects upon some dependent variable.
+.right[-- <cite>Blalock, 1965</cite>]
+</blockquote>
+
+<br>
+
+.scroll-box-14[
+```{r, echo = FALSE,  message=FALSE, warning=FALSE}
+t = lm(bwt~ui+race+smoke+ht+lwt+lwt*ht, data = data_without_low)
+tab_model(t,
+          dv.labels = "plus interaction between lwt and ht"
+)
+```
+]
