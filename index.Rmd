@@ -1,7 +1,7 @@
 ---
 title: "Multiple Regression Analysis on Birthweight "
 subtitle: "DATA2002 Group Presentation"
-author: "Kevin Qiu, Rajat Lal, Taoran Bu, Mingze Gong, Yiren Cao"
+author: "Taoran Bu, Yiren Cao, Mingze Gong, Rajat Lal, Kevin Qiu "
 date: "11 November 2020"
 output:
   xaringan::moon_reader:
@@ -226,7 +226,7 @@ background-color: #0148A4
 
 # .text-shadow[.white[Data Description]]
 
-## .white[Rajat Lal, Taoran Bu]
+## .white[Taoran Bu, Rajat Lal]
 
 ---
 ## Background
@@ -305,7 +305,7 @@ glimpse(birthwt)
 
 ---
 class: title-slide,middle
-background-image: url("assets/USydLogo-white.svg"), url("assets/title-image3.jpg")
+background-image: url("assets/USydLogo-white.svg"), url("assets/title-image1.jpg")
 background-position: 10% 90%, 100% 50%
 background-size: 160px, 50% 100%
 background-color: #0148A4
@@ -313,7 +313,9 @@ background-color: #0148A4
 
 # .text-shadow[.white[Assumption Checking]]
 
-## .white[Yiren Cao]
+## .white[Results]
+
+### .white[Yiren Cao]
 
 ---
 
