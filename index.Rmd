@@ -265,7 +265,8 @@ include_graphics("Picture1.png")
 
 
 .footnote[
-Image source: ???
+1. See `r Citet(myBib,"conter1995weight")`
+2. See `r Citet(myBib,"wilcox1993birth")`
 ]
 ---
 
@@ -366,6 +367,9 @@ class: inverse, center, middle
 {{qtlcharts::iplotCorr(birthwt)}} # non-multicollinearity
 ```
 
+.footnote[
+1. See `r Citet(myBib, "nsc")`
+]
 ---
 ## Assumption Checking - Linearity, Homoskedasticity, Normality
 .center[
@@ -378,6 +382,10 @@ autoplot(reg1, which = 1:2)
 .center[.font110[
 `r icon::fa("bell")`&nbsp;In addition, we can assume the Independence
 ]
+]
+
+.footnote[
+1. See `r Citet(myBib, "sr")` 
 ]
 ---
 ## Assumption Checking - No Multicollinearity
@@ -556,14 +564,27 @@ vif_values_without_low <- regclass::VIF(step.back.aic)
 ```
 ]
 .pull-right[
-.content-box-blue[VIF]
+.content-box-blue[Collinearity]
 ```{r, echo = FALSE, fig.width=5, fig.heigh = 5}
 kable(vif_values_without_low)
 ```
+
+<br>
+
+.content-box-blue[Independence]
+
 ]
 
+
+.footnote[
+1. `r Citet(myBib, "xaringan:2018")`
+2. `r Citet(myBib, "RefManageR:2017")`
+]
 ---
 ## Reference list
+.scroll-output[
 ```{r, results = "asis", echo=FALSE}
 PrintBibliography(myBib)
 ```
+]
+
