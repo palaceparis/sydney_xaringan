@@ -1,8 +1,8 @@
 ---
 title: "Multiple Regression Analysis on Birthweight "
 subtitle: "DATA2002 Group Presentation"
-author: "Taoran Bu, Yiren Cao, Mingze Gong, Rajat Lal, Kevin Qiu "
-date: "11 November 2020"
+author: "M13_early_3 (Taoran Bu, Yiren Cao, Mingze Gong, Rajat Lal, Kevin Qiu)"
+date: "13 November 2020"
 output:
   xaringan::moon_reader:
     css: ["default", "assets/sydney-fonts.css", "assets/sydney.css"]
@@ -304,21 +304,6 @@ glimpse(birthwt)
 ```
 
 ---
-class: title-slide,middle
-background-image: url("assets/USydLogo-white.svg"), url("assets/title-image1.jpg")
-background-position: 10% 90%, 100% 50%
-background-size: 160px, 50% 100%
-background-color: #0148A4
-
-
-# .text-shadow[.white[Assumption Checking]]
-
-## .white[Results]
-
-### .white[Yiren Cao]
-
----
-
 ## Data handling
 
 .scroll-box-20[
@@ -341,6 +326,20 @@ head(birthwt)
 # data_with_low = data
 ```
 ]
+
+---
+class: title-slide,middle
+background-image: url("assets/USydLogo-white.svg"), url("assets/title-image1.jpg")
+background-position: 10% 90%, 100% 50%
+background-size: 160px, 50% 100%
+background-color: #0148A4
+
+
+# .text-shadow[.white[Assumption Checking]]
+
+## .white[Results]
+
+### .white[Yiren Cao]
 
 ---
 ## Assumption Checking - Linearity, Homoskedasticity
