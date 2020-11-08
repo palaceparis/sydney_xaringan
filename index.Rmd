@@ -287,8 +287,7 @@ There are ten variables in this dataset, as shown by the summary statistics:
 .scroll-box-14[
 ```{r, echo = FALSE, warning=FALSE}
 library(MASS)
-data = birthwt
-summary(data)
+summary(birthwt)
 ```
 ]
 
@@ -301,9 +300,125 @@ Here a glimpse of the data set we are going to use in the further research.
 ```{r, echo = FALSE, message=FALSE, warning=FALSE}
 library(dplyr)
 library(MASS)
-data = birthwt
-glimpse(data)
+glimpse(birthwt)
 ```
+
+---
+class: title-slide,middle
+background-image: url("assets/USydLogo-white.svg"), url("assets/title-image3.jpg")
+background-position: 10% 90%, 100% 50%
+background-size: 160px, 50% 100%
+background-color: #0148A4
+
+
+# .text-shadow[.white[Assumption Checking]]
+
+## .white[Yiren Cao]
+
+---
+
+## Data handling
+
+.scroll-box-20[
+```{r, echo = FALSE, message=FALSE, warning=FALSE}
+glimpse(birthwt)
+summary(birthwt)
+head(birthwt)
+# data %>% skimr::skim()
+# visdat::vis_miss(data)
+
+# data = data %>% mutate(
+#   low = as.factor(low),
+#   race = as.character(race),
+#   smoke = as.character(smoke),
+#   ui = as.character(ui),
+#   ht = as.character(ht)
+# )
+# 
+# data_without_low = data %>% dplyr::select(-low)
+# data_with_low = data
+```
+]
+
+---
+## Assumption Checking - Linearity, Homoskedasticity
+```{r, echo = FALSE, message=FALSE, warning=FALSE, fig.width=16, fig.height=15}
+{{qtlcharts::iplotCorr(birthwt)}} # non-multicollinearity
+```
+
+---
+## GGally::ggpairs
+.center[
+```{r, echo = FALSE, message=FALSE, warning=FALSE, fig.width=12, fig.height=8}
+GGally::ggpairs(data_without_low)
+```
+]
+---
+
+## Assumption Checking - Linearity, Homoskedasticity, Normality
+.center[
+```{r, echo = FALSE, message=FALSE, warning=FALSE, fig.width=12, fig.height=6}
+lm1_without_low = lm(bwt ~ ., data = data_without_low)
+autoplot(lm1_without_low, which = 1:2) # linearity + normality
+```
+]
+
+.center[.font110[
+`r icon::fa("bell")`&nbsp;In addition, we can assume the Independence
+]
+]
+---
+## Assumption Checking - No Multicollinearity
+
+.center[
+```{r, echo = FALSE, message=FALSE, warning=FALSE, fig.width=10, fig.height=5}
+M1 = lm1_without_low  # Full model
+vif_values <- regclass::VIF(M1)
+library(knitr)
+kable(vif_values)
+
+```
+]
+<br>
+
+.blockquote[
+### `r icon::fa("location-arrow")` Variance Inflation Factor (VIF)
+- When VIF is equal to 1, the independent variables are not correlated to the one another.
+]
+---
+class: inverse, center, middle
+# Another model: with `low` predictor
+
+
+---
+## Assumption Checking - Linearity, Homoskedasticity, Normality
+.center[
+```{r, echo = FALSE, message=FALSE, warning=FALSE, fig.width=12, fig.height=6}
+reg1 = lm(bwt ~ ., data = data_with_low)
+autoplot(reg1, which = 1:2)
+```
+]
+
+.center[.font110[
+`r icon::fa("bell")`&nbsp;In addition, we can assume the Independence
+]
+]
+---
+## Assumption Checking - No Multicollinearity
+
+.content-box-blue[
+.center[.font100[
+Another model with 'low' predictor
+]
+]
+]
+
+.center[
+```{r, message=FALSE, warning=FALSE, echo= FALSE, fig.width=12, fig.height=5}
+vif_values_with_low <- regclass::VIF(reg1)
+kable(vif_values_with_low)
+```
+]
 
 ---
 class: title-slide,middle
