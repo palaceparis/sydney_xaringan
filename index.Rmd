@@ -575,16 +575,53 @@ kable(vif_values_without_low)
 
 ]
 
-
-.footnote[
-1. `r Citet(myBib, "xaringan:2018")`
-2. `r Citet(myBib, "RefManageR:2017")`
-]
 ---
 ## Reference list
-.scroll-output[
+
 ```{r, results = "asis", echo=FALSE}
 PrintBibliography(myBib)
 ```
-]
 
+
+---
+## Packages
+
+.scroll-output[
+C. Sievert. Interactive Web-Based Data Visualization with R, plotly, and shiny. Chapman and Hall/CRC
+Florida, 2020.
+
+Garrett Grolemund, Hadley Wickham (2011). Dates and Times Made Easy with lubridate. Journal of
+Statistical Software, 40(3), 1-25. URL http://www.jstatsoft.org/v40/i03/.
+
+H. Wickham. ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York, 2016.
+
+Hadley Wickham, Jim Hester and Romain Francois (2018). readr: Read Rectangular Text Data. R package
+version 1.3.1. https://CRAN.R-project.org/package=readr
+
+Hadley Wickham, Romain François, Lionel Henry and Kirill Müller (2020). dplyr: A Grammar of Data
+Manipulation. R package version 1.0.2. https://CRAN.R-project.org/package=dplyr
+
+Julien Barnier (2020). rmdformats: HTML Output Formats and Templates for 'rmarkdown' Documents. R package version 0.3.7.
+https://CRAN.R-project.org/package=rmdformats
+
+Keon-Woong Moon. R statistics and graphs for medical papers. Hannaare Seoul, 2015.
+
+Keon-Woong Moon (2020). webr: Data and Functions for Web-Based Analysis. R package version 0.1.6.
+https://github.com/cardiomoon/webr
+
+Lüdecke D (????). _sjPlot: Data Visualization for Statistics in Social Science_. R package version
+2.8.4.9000, <URL: https://CRAN.R-project.org/package=sjPlot>.
+
+McLean, M. W. (2017). "RefManageR: Import and Manage BibTeX and BibLaTeX References in R". In: The Journal of Open Source Software. DOI: 10.21105/joss.00338.
+
+Richard Iannone, Joe Cheng and Barret Schloerke (2020). gt: Easily Create Presentation-Ready Display
+Tables. R package version 0.2.2. https://CRAN.R-project.org/package=gt
+
+Sam Firke (2020). janitor: Simple Tools for Examining and Cleaning Dirty Data. R package version 2.0.1.
+https://CRAN.R-project.org/package=janitor
+
+Wickham et al., (2019). Welcome to the tidyverse. Journal of Open Source Software, 4(43), 1686,
+https://doi.org/10.21105/joss.01686
+
+Xie, Y. (2018). xaringan: Presentation Ninja. R package version 0.6.4. URL: https://github.com/yihui/xaringan.
+]
