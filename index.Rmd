@@ -19,6 +19,17 @@ output:
       navigation:
         scroll: false # disable slide transitions by scrolling
 ---
+```{r, load_refs, echo=FALSE, cache=FALSE}
+library(RefManageR)
+library(bibtex)
+BibOptions(check.entries = FALSE, 
+           bib.style = "authoryear", 
+           cite.style = 'authoryear', 
+           style = "markdown",
+           hyperlink = FALSE, 
+           dashed = FALSE)
+myBib <- ReadBib("ref.bib", check = FALSE)
+```
 
 ```{r, echo = FALSE, results='hide',  message=FALSE, warning=FALSE}
 library(janitor)
@@ -241,12 +252,17 @@ The data was collected from Baystate Medical Center, Springfield, Massachusetts 
 
 ]
 
+
 .pull-right[
-```{r, echo = FALSE, fig.align="right", fig.cap = "Baystate Medical Center"}
-knitr::include_graphics("Picture1.png")
+```{r echo=FALSE, fig.align= 'center',fig.cap="Baystate Medical Center"}
+library(knitr)
+include_graphics("Picture1.png")
 ```
 
 ]
+
+
+
 
 .footnote[
 Image source: ???
@@ -405,13 +421,6 @@ autoplot(lm1_without_low, which = 1:2) # linearity + normality
 ---
 ## Assumption Checking - No Multicollinearity
 
-.content-box-blue[
-.center[.font100[
-Another model without 'low' predictor
-]
-]
-]
-
 .center[
 ```{r, echo = FALSE, message=FALSE, warning=FALSE, fig.width=5, fig.height=5}
 M1 = lm1_without_low  # Full model
@@ -421,22 +430,6 @@ kable(vif_values)
 ```
 ]
 
----
-## Assumption Re-check
-
-.pull-left[.content-box-blue[Linearity, Homoskedasticity, Normality]
-```{r,  echo = FALSE}
-step.back.aic = step(M1, direction = "backward", trace = FALSE)
-autoplot(step.back.aic, which = 1:2)
-vif_values_without_low <- regclass::VIF(step.back.aic)
-```
-]
-.pull-right[
-.content-box-blue[VIF]
-```{r, echo = FALSE, fig.width=5, fig.heigh = 5}
-kable(vif_values_without_low)
-```
-]
 ---
 class: title-slide,middle
 background-image: url("assets/USydLogo-white.svg"), url("assets/title-image1.jpg")
@@ -531,14 +524,12 @@ cv_without_low
 ---
 ## Limits and possible improvements
 
-<br>
-
 <blockquote>
 Sociological theories often imply that two or more variables interact in their effects upon some dependent variable.
-.right[-- <cite>Blalock, 1965</cite>]
+.right[-- <cite>Blalock.fn[1], 1965</cite>]
 </blockquote>
 
-<br>
+
 
 .scroll-box-14[
 ```{r, echo = FALSE,  message=FALSE, warning=FALSE}
@@ -548,3 +539,31 @@ tab_model(t,
 )
 ```
 ]
+
+.footnote[
+See `r Citet(myBib,"allison1977testing")`
+]
+
+---
+
+## Assumption Re-check
+
+.pull-left[.content-box-blue[Linearity, Homoskedasticity, Normality]
+```{r,  echo = FALSE}
+step.back.aic = step(M1, direction = "backward", trace = FALSE)
+autoplot(step.back.aic, which = 1:2)
+vif_values_without_low <- regclass::VIF(step.back.aic)
+```
+]
+.pull-right[
+.content-box-blue[VIF]
+```{r, echo = FALSE, fig.width=5, fig.heigh = 5}
+kable(vif_values_without_low)
+```
+]
+
+---
+## Reference list
+```{r, results = "asis", echo=FALSE}
+PrintBibliography(myBib)
+```
