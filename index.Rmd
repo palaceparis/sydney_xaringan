@@ -337,16 +337,50 @@ background-color: #0148A4
 
 # .text-shadow[.white[Assumption Checking]]
 
-## .white[Results]
 
 ### .white[Yiren Cao]
 
+---
+
+class: inverse, center, middle
+# The model: with `low` predictor
 ---
 ## Assumption Checking - Linearity, Homoskedasticity
 ```{r, echo = FALSE, message=FALSE, warning=FALSE, fig.width=16, fig.height=15}
 {{qtlcharts::iplotCorr(birthwt)}} # non-multicollinearity
 ```
 
+---
+## Assumption Checking - Linearity, Homoskedasticity, Normality
+.center[
+```{r, echo = FALSE, message=FALSE, warning=FALSE, fig.width=12, fig.height=6}
+reg1 = lm(bwt ~ ., data = data_with_low)
+autoplot(reg1, which = 1:2)
+```
+]
+
+.center[.font110[
+`r icon::fa("bell")`&nbsp;In addition, we can assume the Independence
+]
+]
+---
+## Assumption Checking - No Multicollinearity
+
+.center[
+```{r, message=FALSE, warning=FALSE, echo= FALSE, fig.width=12, fig.height=5}
+library(knitr)
+vif_values_with_low <- regclass::VIF(reg1)
+kable(vif_values_with_low)
+```
+]
+
+.blockquote[
+### `r icon::fa("location-arrow")` Variance Inflation Factor (VIF)
+- When VIF is equal to 1, the independent variables are not correlated to the one another.
+]
+---
+class: inverse, center, middle
+# Another model: without `low` predictor
 ---
 ## GGally::ggpairs
 .center[
@@ -371,56 +405,38 @@ autoplot(lm1_without_low, which = 1:2) # linearity + normality
 ---
 ## Assumption Checking - No Multicollinearity
 
+.content-box-blue[
+.center[.font100[
+Another model without 'low' predictor
+]
+]
+]
+
 .center[
-```{r, echo = FALSE, message=FALSE, warning=FALSE, fig.width=10, fig.height=5}
+```{r, echo = FALSE, message=FALSE, warning=FALSE, fig.width=5, fig.height=5}
 M1 = lm1_without_low  # Full model
 vif_values <- regclass::VIF(M1)
 library(knitr)
 kable(vif_values)
-
-```
-]
-<br>
-
-.blockquote[
-### `r icon::fa("location-arrow")` Variance Inflation Factor (VIF)
-- When VIF is equal to 1, the independent variables are not correlated to the one another.
-]
----
-class: inverse, center, middle
-# Another model: with `low` predictor
-
-
----
-## Assumption Checking - Linearity, Homoskedasticity, Normality
-.center[
-```{r, echo = FALSE, message=FALSE, warning=FALSE, fig.width=12, fig.height=6}
-reg1 = lm(bwt ~ ., data = data_with_low)
-autoplot(reg1, which = 1:2)
 ```
 ]
 
-.center[.font110[
-`r icon::fa("bell")`&nbsp;In addition, we can assume the Independence
-]
-]
 ---
-## Assumption Checking - No Multicollinearity
+## Assumption Re-check
 
-.content-box-blue[
-.center[.font100[
-Another model with 'low' predictor
-]
-]
-]
-
-.center[
-```{r, message=FALSE, warning=FALSE, echo= FALSE, fig.width=12, fig.height=5}
-vif_values_with_low <- regclass::VIF(reg1)
-kable(vif_values_with_low)
+.pull-left[.content-box-blue[Linearity, Homoskedasticity, Normality]
+```{r,  echo = FALSE}
+step.back.aic = step(M1, direction = "backward", trace = FALSE)
+autoplot(step.back.aic, which = 1:2)
+vif_values_without_low <- regclass::VIF(step.back.aic)
 ```
 ]
-
+.pull-right[
+.content-box-blue[VIF]
+```{r, echo = FALSE, fig.width=5, fig.heigh = 5}
+kable(vif_values_without_low)
+```
+]
 ---
 class: title-slide,middle
 background-image: url("assets/USydLogo-white.svg"), url("assets/title-image1.jpg")
@@ -430,8 +446,6 @@ background-color: #0148A4
 
 
 # .text-shadow[.white[Analysis]]
-
-## .white[Results]
 
 ### .white[Mingze Gong]
 
