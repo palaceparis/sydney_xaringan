@@ -267,6 +267,8 @@ include_graphics("Picture1.png")
 .footnote[
 1. See `r Citet(myBib,"conter1995weight")`
 2. See `r Citet(myBib,"wilcox1993birth")`
+3. Image source: https://bostonglobe-prod.cdn.arcpublishing.com/resizer/l8-8Xax4sO9IkFba-M4JvqAg_fU=/1024x0/arc-anglerfish-arc2-prod-bostonglobe.s3.amazonaws.com/public/KYYZYODAWUI6NOBKIH4XVXGGOQ.jpg
+
 ]
 ---
 
@@ -288,28 +290,11 @@ knitr::include_graphics("Picture2.png")
 ]
 
 .footnote[
-Image source: ???
-]
----
-## Pre Analysis Observations
-
-
-There are ten variables in this dataset, as shown by the summary statistics:
-
-- Mean birth weight is approximately 2.9kg, about 600 grams below the expected mean of 3.5kg. This is within the normal range of weights of 2.5kg-
-
-
-
-
-.scroll-box-14[
-```{r, echo = FALSE, warning=FALSE}
-library(MASS)
-summary(birthwt)
-```
+Image source: https://media.istockphoto.com/photos/baby39s-visit-to-the-doctor-picture-id1130456907?k=6&m=1130456907&s=612x612&w=0&h=ILR1npR33392G4mJgJyWi20nQ2THWGsPcF1sQRhJQpo=
 ]
 
 ---
-## birthwt in R
+## Birthwt in R
 
 Here a glimpse of the data set we are going to use in the further research.
 
@@ -320,14 +305,91 @@ library(MASS)
 glimpse(birthwt)
 ```
 
----
-## Data handling
+.font80[
+.pull-left[
+.content-box-blue[
+Numerical variables:
+- mother’s age (age)
+- mother’s weight (lwt)
+- number of premature labors (ptl)
+- number of physician visits (ftv)
+- birth weight of the child (bwt)
+]
+]
 
+.pull-right[
+.content-box-blue[
+Categorical variables:
+- low (birth weight below or above 2.5kg)
+- race of mother (race)
+- whether mother smokes (smoke)
+- mother’s hypertension history (ht)
+- mother’s presence of uterine irretability (ui)
+]
+]
+]
+---
+## Pre Analysis Observations
+
+.pull-left[
+There are ten variables in this dataset, as shown by the summary statistics:
+
+- Mean birth weight is approximately 2.9kg, which is 600 grams below the expected mean of 3.5kg. This is within the normal range of weights of 2.5kg - 4.5kg.
+
+
+- Mother’s weight had a mean of 129.8 lb compared to the expected mean of 163.8 lb in 1999–2000. This may influence the lower range of birth weights of the babies.
+]
+
+.pull-right[
 .scroll-box-20[
+.font80[
+
+```{r echo=FALSE}
+birthwt %>% select(age, lwt, ptl, ftv, bwt) %>% summary %>% kable()
+```
+
+<br>
+
+
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+t1 = data_without_low %>% group_by(race) %>% summarise(freq=n()) %>% mutate(proportion = round(freq/sum(freq),2))
+kable(t1)
+```
+
+<br>
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+t3 = data_without_low %>% group_by(ui) %>% summarise(freq=n()) %>% mutate(proportion = round(freq/sum(freq),2))
+kable(t3)
+```
+
+<br>
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+t4 = data_without_low %>% group_by(ht) %>% summarise(freq=n()) %>% mutate(proportion = round(freq/sum(freq),2))
+kable(t4)
+```
+
+<br>
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+t2 = data_without_low %>% group_by(smoke) %>% summarise(freq=n()) %>% mutate(proportion = round(freq/sum(freq),2))
+kable(t2)
+```
+]
+]
+]
+
+
+
+
 ```{r, echo = FALSE, message=FALSE, warning=FALSE}
-glimpse(birthwt)
-summary(birthwt)
-head(birthwt)
+# glimpse(birthwt)
+# summary(birthwt)
+# head(birthwt)
 # data %>% skimr::skim()
 # visdat::vis_miss(data)
 
@@ -342,7 +404,7 @@ head(birthwt)
 # data_without_low = data %>% dplyr::select(-low)
 # data_with_low = data
 ```
-]
+
 
 ---
 class: title-slide,middle
@@ -390,6 +452,8 @@ autoplot(reg1, which = 1:2)
 ---
 ## Assumption Checking - No Multicollinearity
 
+<br>
+
 .center[
 ```{r, message=FALSE, warning=FALSE, echo= FALSE, fig.width=12, fig.height=5}
 library(knitr)
@@ -405,13 +469,6 @@ kable(vif_values_with_low)
 ---
 class: inverse, center, middle
 # Another model: without `low` predictor
----
-## GGally::ggpairs
-.center[
-```{r, echo = FALSE, message=FALSE, warning=FALSE, fig.width=12, fig.height=8}
-GGally::ggpairs(data_without_low)
-```
-]
 ---
 
 ## Assumption Checking - Linearity, Homoskedasticity, Normality
@@ -429,6 +486,8 @@ autoplot(lm1_without_low, which = 1:2) # linearity + normality
 ---
 ## Assumption Checking - No Multicollinearity
 
+<br>
+
 .center[
 ```{r, echo = FALSE, message=FALSE, warning=FALSE, fig.width=5, fig.height=5}
 M1 = lm1_without_low  # Full model
@@ -437,6 +496,135 @@ library(knitr)
 kable(vif_values)
 ```
 ]
+---
+class: title-slide,middle
+background-image: url("assets/USydLogo-white.svg"), url("assets/title-image1.jpg")
+background-position: 10% 90%, 100% 50%
+background-size: 160px, 50% 100%
+background-color: #0148A4
+
+
+# .text-shadow[.white[Analysis]]
+
+### .white[Yu Qiu]
+---
+## Stepwise Variable Selection
+Start with a stepwise variable selection from full model
+<br>
+
+.scroll-output[
+```{r}
+drop1(M1, test = "F")
+M2 = update(M1, . ~ . - ftv)
+drop1(M2, test = "F")
+M3 = update(M2, . ~ . - age)
+drop1(M3, test = "F")
+M4 = update(M3, . ~ . - ptl)
+drop1(M4, test = "F")
+```
+]
+
+---
+## Backward AIC
+
+Backward AIC checking is performed:
+
+
+
+```{r echo=FALSE}
+tab_model(step.back.aic)
+```
+
+
+```{r, echo = FALSE, message=FALSE, warning=FALSE, fig.width=10, fig.height=5}
+# library(kableExtra)
+# step.back.aic = step(M1, direction = "backward", trace = FALSE)
+# yyyy = round(summary(step.back.aic)$coef,3)
+# yyyy %>%
+#   kbl() %>%
+#   kable_styling(bootstrap_options = "striped", full_width = F, position = "left")
+```
+
+
+
+```{r echo = FALSE, message=FALSE, warning=FALSE}
+# 
+# zzz = step.back.aic %>%broom::glance() %>% round(2) %>% t()
+# zzz %>% kbl() %>%   kable_styling(bootstrap_options = "striped", full_width = F, position = "left")
+
+```
+
+---
+## Forward AIC
+
+Forward AIC checking is performed from Null:
+
+
+```{r echo = FALSE}
+tab_model(step.fwd.aic)
+```
+
+
+---
+## Exhaustive searches
+```{r echo=FALSE, message=FALSE}
+library(kableExtra)
+exh = regsubsets(bwt~., data = data_without_low, nvmax = 8)
+summary(exh)$outmat %>% kbl()
+```
+---
+## Comparison - Exactly Same Model!
+.center[
+```{r,echo=FALSE}
+sjPlot::tab_model(
+  step.fwd.aic, step.back.aic, 
+  show.ci = FALSE, 
+  show.aic = TRUE,
+  dv.labels = c("Forward model",
+                "Backward model")
+)
+```
+]
+---
+## Output performance check-10 Fold validation
+
+<br>
+
+```{r,echo=FALSE}
+cv_without_low = train(
+  bwt ~ lwt + race + smoke + ht+ ui, data_without_low,
+  method = "lm",
+  trControl = trainControl(
+    method = "cv", number = 10,
+    verboseIter = FALSE
+  )
+)
+# cv_without_low
+kable(cv_without_low$results, caption = "Without low predictor")
+
+
+#lm(bwt ~ lwt + race + smoke + ht+ ui, data= data_without_low)
+
+
+# ## Output performance check-10 Fold validation(With_low Model)
+# ```{r,echo=FALSE}
+# cv_with_low = train(
+#   bwt ~ low + ui+ smoke + race, data_with_low,
+#   method = "lm",
+#   trControl = trainControl(
+#     method = "cv", number = 10,
+#     verboseIter = FALSE
+#   )
+# )
+# kable(cv_with_low$results, caption = "With low predictor")
+# #lm(bwt ~ low + ui+ smoke + race, data= data_with_low)
+```
+
+<br>
+
+```{r echo=FALSE}
+kable(cv_with_low$results, caption = "With low predictor")
+```
 
 ---
 class: title-slide,middle
@@ -582,6 +770,12 @@ kable(vif_values_without_low)
 PrintBibliography(myBib)
 ```
 
+---
+Pregnancy and smoking. (2019). Retrieved from https://www.betterhealth.vic.gov.au/health/healthyliving/pregnancy-and-smoking
+
+Physical Growth in Newborns | Michigan Medicine. (2019). Retrieved from https://www.uofmhealth.org/health-library/te6295#:~:text=The%20average%20birth%20weight%20for,usually%20lighter%20than%20later%20siblings
+
+National Health Statistics Reports (2018). Retrieved from https://www.cdc.gov/nchs/data/nhsr/nhsr122-508.pdf
 
 ---
 ## Packages
