@@ -1,7 +1,7 @@
 ---
 title: "Multiple Regression Analysis on Birthweight "
 subtitle: "DATA2002 Group Presentation"
-author: "M13_early_3 (Taoran Bu, Yiren Cao, Mingze Gong, Rajat Lal, Kevin Qiu)"
+author: "M13_early_3 (Taoran Bu, Yiren Cao, Mingze Gong, Rajat Lal, Yu Qiu)"
 date: "13 November 2020"
 output:
   xaringan::moon_reader:
