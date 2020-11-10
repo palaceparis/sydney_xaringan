@@ -432,7 +432,7 @@ library(MASS)
 
 ---
 class: inverse, center, middle
-# The model: without `low` predictor
+# The full model: without `low` predictor
 ---
 
 ## Assumption Checking - Linearity, Homoskedasticity, Normality
@@ -462,7 +462,7 @@ kable(vif_values)
 ]
 ---
 class: inverse, center, middle
-# Another model: with `low` predictor
+# Another full model: with `low` predictor
 
 ---
 ## Assumption Checking - Linearity, Homoskedasticity, Normality
