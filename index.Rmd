@@ -667,18 +667,13 @@ $$\operatorname{bwt}_{low} = 3294.45 - 1131.17(\operatorname{low}_{\operatorname
 ]
 ]
 
---
+
 .center[
 .font170[Which one is better `r icon::fa("question", pull = "centre", color = 'red')` 
 ]
 ]
---
---
-.center[
-.font170[Is there a better model here `r icon::fa("question", pull = "centre", color = 'red')` 
-]
-]
---
+
+
 .center[
 .font190[Drop1&Update = AIC backward = AIC forward
 ]
