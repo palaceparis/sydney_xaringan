@@ -424,7 +424,7 @@ background-color: #0148A4
 class: inverse, center, middle
 # The model: with `low` predictor
 ---
-## Assumption Checking - Linearity, Homoskedasticity
+## Assumption Checking
 ```{r, echo = FALSE, message=FALSE, warning=FALSE, fig.width=16, fig.height=15}
 {{qtlcharts::iplotCorr(birthwt)}} # non-multicollinearity
 ```
@@ -819,3 +819,37 @@ https://doi.org/10.21105/joss.01686
 
 Xie, Y. (2018). xaringan: Presentation Ninja. R package version 0.6.4. URL: https://github.com/yihui/xaringan.
 ]
+---
+class: sydney-blue
+background-image: url(assets/USydLogo-white.svg)
+background-size: 260px
+background-position: 5% 95%
+
+# Thanks!
+
+.pull-right[.pull-down[
+
+<a href="https://github.com/garthtarr/sydney_xaringan">
+.white[`r icon::fa("link")` github.com/garthtarr/sydney_xaringan]
+</a>
+
+<a href="https://github.com/palaceparis/sydney_xaringan">
+.white[`r icon::fa("link")` github.com/palaceparis/sydney_xaringan]
+</a>
+
+<a href="https://github.sydney.edu.au/ycao9622/M13_early_3/tree/master">
+.white[`r icon::fa("github")` @master-ycao9622]
+</a>
+
+<a href="https://github.sydney.edu.au/ycao9622/M13_early_3/tree/tabu3376">
+.white[`r icon::fa("github")` @branch-taobu3376]
+</a>
+
+<a href="https://github.sydney.edu.au/ycao9622/M13_early_3/tree/tony">
+.white[`r icon::fa("github")` @branch-mgon3916]
+</a>
+
+
+<br><br><br>
+
+]]
