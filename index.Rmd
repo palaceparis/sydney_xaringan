@@ -420,18 +420,50 @@ background-color: #0148A4
 ### .white[Yiren Cao]
 
 ---
-
-class: inverse, center, middle
-# The model: with `low` predictor
----
 ## Assumption Checking
 ```{r, echo = FALSE, message=FALSE, warning=FALSE, fig.width=16, fig.height=15}
+library(MASS)
 {{qtlcharts::iplotCorr(birthwt)}} # non-multicollinearity
 ```
 
 .footnote[
 1. See `r Citet(myBib, "nsc")`
 ]
+
+---
+class: inverse, center, middle
+# The model: without `low` predictor
+---
+
+## Assumption Checking - Linearity, Homoskedasticity, Normality
+.center[
+```{r, echo = FALSE, message=FALSE, warning=FALSE, fig.width=12, fig.height=6}
+lm1_without_low = lm(bwt ~ ., data = data_without_low)
+autoplot(lm1_without_low, which = 1:2) # linearity + normality
+```
+]
+
+.center[.font110[
+`r icon::fa("bell")`&nbsp;In addition, we can assume the Independence
+]
+]
+---
+## Assumption Checking - No Multicollinearity
+
+<br>
+
+.center[
+```{r, echo = FALSE, message=FALSE, warning=FALSE, fig.width=5, fig.height=5}
+M1 = lm1_without_low  # Full model
+vif_values <- regclass::VIF(M1)
+library(knitr)
+kable(vif_values)
+```
+]
+---
+class: inverse, center, middle
+# Another model: with `low` predictor
+
 ---
 ## Assumption Checking - Linearity, Homoskedasticity, Normality
 .center[
@@ -466,36 +498,7 @@ kable(vif_values_with_low)
 ### `r icon::fa("location-arrow")` Variance Inflation Factor (VIF)
 - When VIF is equal to 1, the independent variables are not correlated to the one another.
 ]
----
-class: inverse, center, middle
-# Another model: without `low` predictor
----
 
-## Assumption Checking - Linearity, Homoskedasticity, Normality
-.center[
-```{r, echo = FALSE, message=FALSE, warning=FALSE, fig.width=12, fig.height=6}
-lm1_without_low = lm(bwt ~ ., data = data_without_low)
-autoplot(lm1_without_low, which = 1:2) # linearity + normality
-```
-]
-
-.center[.font110[
-`r icon::fa("bell")`&nbsp;In addition, we can assume the Independence
-]
-]
----
-## Assumption Checking - No Multicollinearity
-
-<br>
-
-.center[
-```{r, echo = FALSE, message=FALSE, warning=FALSE, fig.width=5, fig.height=5}
-M1 = lm1_without_low  # Full model
-vif_values <- regclass::VIF(M1)
-library(knitr)
-kable(vif_values)
-```
-]
 ---
 class: title-slide,middle
 background-image: url("assets/USydLogo-white.svg"), url("assets/title-image1.jpg")
@@ -839,6 +842,10 @@ background-position: 5% 95%
 
 <a href="https://github.sydney.edu.au/ycao9622/M13_early_3/tree/master">
 .white[`r icon::fa("github")` @master-ycao9622]
+</a>
+
+<a href="https://github.sydney.edu.au/ycao9622/M13_early_3/tree/yiren">
+.white[`r icon::fa("github")` @branch-ycao9622]
 </a>
 
 <a href="https://github.sydney.edu.au/ycao9622/M13_early_3/tree/tabu3376">
