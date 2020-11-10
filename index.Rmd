@@ -755,7 +755,7 @@ vif_values_without_low <- regclass::VIF(step.back.aic)
 ```
 ]
 .pull-right[
-.content-box-blue[Collinearity]
+.content-box-blue[Non-collinearity]
 ```{r, echo = FALSE, fig.width=5, fig.heigh = 5}
 kable(vif_values_without_low)
 ```
